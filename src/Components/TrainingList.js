@@ -66,7 +66,7 @@ export default function TrainingList() {
     
     return (
         <div className='list'>
-            <MaterialTable title='Trainings List' columns={state.columns} data={trainings} icons={tableIcons}></MaterialTable>
+            <MaterialTable title='Trainings List' columns={state.columns} data={trainings} icons={tableIcons} />
         </div>
     );
 }

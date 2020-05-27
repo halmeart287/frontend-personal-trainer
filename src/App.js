@@ -1,51 +1,25 @@
 import React from 'react';
 import './App.css';
-import CustomerList from './Components/CustomerList';
-import TrainingList from './Components/TrainingList';
-// Menu
-import Paper from '@material-ui/core/Paper';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
-import { makeStyles } from '@material-ui/core/styles';
+import SimpleMenu from './Components/SimpleMenu';
+// AppBar
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
 function App() {
-
-    // Menu functionalities.
-    const useStyles = makeStyles((theme) => ({
-        root: {
-          display: 'flex',
-        },
-        paper: {
-          marginRight: theme.spacing(2),
-        },
-    }));
-
-    const classes = useStyles();
-
-    const [page, setPage] = React.useState();
-
-    const openPage = (event) => {
-        if (event.target.value === 1)
-            setPage(<CustomerList />)
-
-        else if (event.target.value === 2)
-            setPage(<TrainingList />)
-        
-        else
-            setPage(null)
-    }
 
     return (
 
         <div>
-            <Paper className={classes.paper}>
-                <MenuList>
-                    <MenuItem value='1' onClick={openPage}>Customer List</MenuItem>
-                    <MenuItem value='2' onClick={openPage}>Tranings List</MenuItem>
-                    <MenuItem onClick={openPage}>Close all</MenuItem>
-                </MenuList>
-            </Paper>
-            {page}
+            <AppBar position='sticky'>
+                <Toolbar variant="dense">
+                <Typography variant="h6" color="inherit">
+                    Personal Trainer App
+                </Typography>
+                </Toolbar>
+            </AppBar>
+            
+            <SimpleMenu />
         </div>
     );
 

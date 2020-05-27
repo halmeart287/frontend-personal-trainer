@@ -67,7 +67,7 @@ export default function CustomerList() {
     
     return (
         <div className='list'>
-            <MaterialTable title='Customer List' columns={state.columns} data={customers} icons={tableIcons}></MaterialTable>
+            <MaterialTable title='Customer List' columns={state.columns} data={customers} icons={tableIcons} />
         </div>
     );
 }
