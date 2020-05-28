@@ -16,6 +16,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import AddCustomer from './AddCustomer';
 
 export default function CustomerList() {
     
@@ -40,7 +41,7 @@ export default function CustomerList() {
             {title: 'Phone', field: 'phone'},
             {title: 'Street', field: 'streetaddress'},
             {title: 'Postcode', field: 'postcode'},
-            {title: 'City', field: 'city'},
+            {title: 'City', field: 'city'}
         ]
     });
 
@@ -64,10 +65,61 @@ export default function CustomerList() {
         ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
         ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
     }
+
+    // Adding and saving a new customer.
+    const fetchData = () => {
+        fetch('https://customerrest.herokuapp.com/api/customers')
+        .then(response => response.json())
+        .then(data => setCustomers(data.content))
+    }
+
+    const saveCustomer = (customer) => {
+        fetch('https://customerrest.herokuapp.com/api/customers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(customer)
+        })
+        .then(res => fetchData())
+        .catch(err => window.error(err))
+    }
+
+    // Editing existing row data.
+    const editCustomer = (customer) => {
+        const updatedCustomer = {
+          firstname: customer.firstname,
+          lastname: customer.lastname,
+          email: customer.email,
+          phone: customer.phone,
+          streetaddress: customer.streetaddress,
+          postcode: customer.postcode,
+          city: customer.city
+    } 
     
+    fetch(customer.links[0].href, {
+      method: 'PUT',
+      headers: {
+          'Content-Type':'application/json'
+      },
+      body: JSON.stringify(customer)
+    })
+    .then(_ => fetchCustomers())
+    .catch(err => console.error(err))
+    }
+
+
     return (
         <div className='list'>
-            <MaterialTable title='Customer List' columns={state.columns} data={customers} icons={tableIcons} />
+            <AddCustomer saveCustomer={saveCustomer}/>
+            <MaterialTable title='Customer List' columns={state.columns} data={customers} icons={tableIcons} 
+            editable={{
+                onRowUpdate: (newData, _) =>
+                    new Promise((resolve, _) => {
+                        editCustomer(newData);
+                        resolve();
+                    })
+            }} />
         </div>
     );
 }

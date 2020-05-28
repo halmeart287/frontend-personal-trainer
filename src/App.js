@@ -12,8 +12,8 @@ function App() {
 
         <div>
             <AppBar position='sticky'>
-                <Toolbar variant="dense">
-                <Typography variant="h6" color="inherit">
+                <Toolbar variant='dense'>
+                <Typography variant='h6' color='inherit'>
                     Personal Trainer App
                 </Typography>
                 </Toolbar>
