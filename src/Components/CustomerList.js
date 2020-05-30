@@ -17,6 +17,8 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import AddCustomer from './AddCustomer';
+//import AddTrainings from './AddTrainings';
+import Snackbar from '@material-ui/core/Snackbar';
 
 export default function CustomerList() {
     
@@ -82,6 +84,9 @@ export default function CustomerList() {
             body: JSON.stringify(customer)
         })
         .then(res => fetchData())
+        .then(_ => {
+            setSnackMessage('Customer saved.');
+            setOpen(true)})
         .catch(err => window.error(err))
     }
 
@@ -109,6 +114,9 @@ export default function CustomerList() {
       body: JSON.stringify(customer)
     })
     .then(_ => fetchCustomers())
+    .then(_ => {
+        setSnackMessage('Customer info updated.');
+        setOpen(true)})
     .catch(err => console.error(err))
     }
 
@@ -123,11 +131,30 @@ export default function CustomerList() {
                 body: JSON.stringify(customer)
             })
             .then(_ => fetchCustomers())
+            .then(_ => {
+                setSnackMessage('Customer deleted.');
+                setOpen(true)})
             .catch(err => console.error(err))
     }
 
-    // Select row styling and actions
+    // Select row styling and actions.
     const [selectedRow, setSelectedRow] = React.useState(null);
+
+
+    // Training to Customer WIP...
+        // How to POST body data that's been selected.
+        // Also, how to select a Customer and present available Trainings...
+
+    // Snackbar
+    const [open, setOpen] = React.useState(false);
+    const [snackMessage, setSnackMessage] = React.useState('');
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setOpen(false);
+      };
 
 
     return (
@@ -147,12 +174,24 @@ export default function CustomerList() {
                     })
             }} localization={{ body: { editRow: { deleteText: 'Are you certain? There is no going back.'}}}}
 
-            onRowClick={((evt, selectedRow) => setSelectedRow(selectedRow.tableData.id))}
+            onRowClick=
+            {((evt, selectedRow) => setSelectedRow(selectedRow.tableData.id))}
             options={{
                 rowStyle: rowData => ({
                     backgroundColor: (selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'
                 })
             }}
+            />
+
+            <Snackbar
+                anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+                }}
+                open={open}
+                autoHideDuration={4000}
+                onClose={handleClose}
+                message={snackMessage}
             />
         </div>
     );

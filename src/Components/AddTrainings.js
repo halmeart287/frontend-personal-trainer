@@ -1,25 +1,56 @@
 import React from 'react';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TrainingList from './TrainingList';
 
 
-// Note. This is not the same as adding a customer. Here we attach 'Customer' to 'Training'.
+// Note. This is not the same as adding a customer. Here I should attach 'Customer' to 'Training'.
+// WIP...
+// Instead of a Button and copying AddCustomer.js, I should add onClick row fuction to open up a new form,
+// that would present selected Customer's name and dropdown selection of available trainings..?
 export default function AddTrainings(props) {
 
     const [customerTraining, setCustomerTraining] = React.useState({
         activity: '', date: '', duration: '', customer: ''
     });
 
+    const [customer, setCustomer] = React.useState({
+        firstname: '', lastname: '', email: '',
+        phone: '', streetaddress: '', postcode: '', city: ''
+    });
+
+    const fetchCustomer = () => {
+        fetch('https://customerrest.herokuapp.com/api/customers')
+        .then(response => response.json())
+        .then(data => setCustomer(data.content))
+        .catch(err => console.error(err))
+    }
+
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
+        fetchCustomer();
         setOpen(true);
     }
   
     const handleClose = () => {
-        props.addTraining(customerTraining);
         setOpen(false);
     }
 
+    const handleInputChange = (event) => {
+        setCustomerTraining({...customerTraining, [event.target.name]: event.target.value})
+        setCustomer({...customer, [event.target.name]: event.target.value })
+    }
 
+    const addTraining = () => {
+        handleClickOpen();
+        props.saveTraining(customerTraining);
+        handleClose();
+    }
 
 
     return(
@@ -29,21 +60,21 @@ export default function AddTrainings(props) {
                         <DialogContent>
                             <TextField
                                 autoFocus
-                                disabled id='standard-disabled'
+                                disabled='true'
                                 margin='dense'
                                 name='firstname'
                                 value={customer.firstname}
-                                label='First Name'
                                 fullWidth
                             />
                             <TextField
-                                disabled id='standard-disabled'
-                                margin='dense'
-                                name='lastname'
-                                value={customer.lastname}
-                                label='Last Name'
+                                onChange={e => handleInputChange(e)}
                                 fullWidth
                             />
+                            <select>
+                                <option>
+                                    {trainings.activity}
+                                </option>
+                            </select>
                         </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose} color="primary">

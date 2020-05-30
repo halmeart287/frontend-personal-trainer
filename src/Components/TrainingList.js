@@ -18,6 +18,9 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 // Moment.js for date formatting
 import Moment from 'moment';
+// Add Training to Customer
+// import AddTrainings from './AddTrainings';
+import Snackbar from '@material-ui/core/Snackbar';
 
 export default function TrainingList() {
     
@@ -65,6 +68,9 @@ export default function TrainingList() {
     }
 
     // Deleting training type data.
+    // Note: Task possibly understood wrong. Deleting this data doesn't make sense without
+    // a possibilyty to create new one. Instead "Delete Training" would refer to an option
+    // to remove the link between a customer and attached training, no..?
     const deleteTraining = (training) => {
 
         fetch(training.links[0].href, {
@@ -75,12 +81,40 @@ export default function TrainingList() {
             body: JSON.stringify(training)
         })
         .then(_ => fetchTrainings())
+        .then(_ => {
+            setSnackMessage('Training deleted.');
+            setOpen(true)})
         .catch(err => console.error(err))
     }
 
     // Select row styling and actions
     const [selectedRow, setSelectedRow] = React.useState(null);
 
+    // Add Training to Customer
+    /*const addTraining = (customers) => {
+
+            fetch(customers.links[0].href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: {
+
+                }
+            })
+    }
+    */
+
+    // Snackbar
+    const [open, setOpen] = React.useState(false);
+    const [snackMessage, setSnackMessage] = React.useState('');
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setOpen(false);
+      };
     
     return (
         <div className='list'>
@@ -100,6 +134,28 @@ export default function TrainingList() {
                     backgroundColor: (selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'
                 })
             }}
+
+            detailPanel={[
+                {
+                    tooltip: 'Show customers',
+                    render: rowData => {
+                        return(
+                            <div>{}</div>
+                        )
+                    }
+                }
+            ]}
+            />
+
+            <Snackbar
+                anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+                }}
+                open={open}
+                autoHideDuration={4000}
+                onClose={handleClose}
+                message={snackMessage}
             />
         </div>
     );
