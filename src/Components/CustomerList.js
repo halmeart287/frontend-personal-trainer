@@ -87,6 +87,7 @@ export default function CustomerList() {
 
     // Editing existing row data.
     const editCustomer = (customer) => {
+
         const updatedCustomer = {
           firstname: customer.firstname,
           lastname: customer.lastname,
@@ -95,7 +96,10 @@ export default function CustomerList() {
           streetaddress: customer.streetaddress,
           postcode: customer.postcode,
           city: customer.city
-    } 
+    }
+
+    // To prevent 'updatedCustomer isn't assigned' warning.
+    console.log(updatedCustomer)
     
     fetch(customer.links[0].href, {
       method: 'PUT',
@@ -108,6 +112,23 @@ export default function CustomerList() {
     .catch(err => console.error(err))
     }
 
+    // Deleting existing row data.
+    const deleteCustomer = (customer) => {
+
+            fetch(customer.links[0].href, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(customer)
+            })
+            .then(_ => fetchCustomers())
+            .catch(err => console.error(err))
+    }
+
+    // Select row styling and actions
+    const [selectedRow, setSelectedRow] = React.useState(null);
+
 
     return (
         <div className='list'>
@@ -118,8 +139,21 @@ export default function CustomerList() {
                     new Promise((resolve, _) => {
                         editCustomer(newData);
                         resolve();
+                    }),
+                onRowDelete: (oldData, _) =>
+                    new Promise((resolve, _) =>{
+                        deleteCustomer(oldData);
+                        resolve();
                     })
-            }} />
+            }} localization={{ body: { editRow: { deleteText: 'Are you certain? There is no going back.'}}}}
+
+            onRowClick={((evt, selectedRow) => setSelectedRow(selectedRow.tableData.id))}
+            options={{
+                rowStyle: rowData => ({
+                    backgroundColor: (selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'
+                })
+            }}
+            />
         </div>
     );
 }

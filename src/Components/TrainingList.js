@@ -63,10 +63,44 @@ export default function TrainingList() {
         ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
         ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
     }
+
+    // Deleting training type data.
+    const deleteTraining = (training) => {
+
+        fetch(training.links[0].href, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(training)
+        })
+        .then(_ => fetchTrainings())
+        .catch(err => console.error(err))
+    }
+
+    // Select row styling and actions
+    const [selectedRow, setSelectedRow] = React.useState(null);
+
     
     return (
         <div className='list'>
-            <MaterialTable title='Trainings List' columns={state.columns} data={trainings} icons={tableIcons} />
+            <MaterialTable title='Trainings List' columns={state.columns} data={trainings} icons={tableIcons}
+            editable={{
+                onRowDelete: (oldData, _) =>
+                new Promise((resolve, _) => {
+                    deleteTraining(oldData);
+                    resolve();
+                })
+            }}
+            localization={{ body: { editRow: { deleteText: 'Are you certain? There is no going back.'}}}}
+
+            onRowClick={((evt, selectedRow) => setSelectedRow(selectedRow.tableData.id))}
+            options={{
+                rowStyle: rowData => ({
+                    backgroundColor: (selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'
+                })
+            }}
+            />
         </div>
     );
 }
