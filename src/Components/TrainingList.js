@@ -105,6 +105,11 @@ export default function TrainingList() {
     }
     */
 
+    // WIP: Showing the customers under a single trainings
+        // Fetching the right endpoint and parcing linked customer endpoints...
+
+
+
     // Snackbar
     const [open, setOpen] = React.useState(false);
     const [snackMessage, setSnackMessage] = React.useState('');
@@ -140,7 +145,7 @@ export default function TrainingList() {
                     tooltip: 'Show customers',
                     render: rowData => {
                         return(
-                            <div>{}</div>
+                            <div style={{margin: 20}}>WIP: Render all the customers linked to this training.</div>
                         )
                     }
                 }

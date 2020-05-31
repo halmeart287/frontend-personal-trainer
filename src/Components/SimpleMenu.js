@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { makeStyles } from '@material-ui/core/styles';
+import Calendar from 'react-calendar';
 
 export default function SimpleMenu() {
 
@@ -39,6 +40,9 @@ export default function SimpleMenu() {
 
         else if (event.target.value === 2)
             setPage(<TrainingList />)
+
+        else if (event.target.value === 3)
+            setPage(<Calendar />)
         
         else
             setPage(null)
@@ -50,6 +54,7 @@ export default function SimpleMenu() {
                 <MenuList>
                     <MenuItem value='1' onClick={openPage}>Customer List</MenuItem>
                     <MenuItem value='2' onClick={openPage}>Tranings List</MenuItem>
+                    <MenuItem value='3' onClick={openPage}>Calendar</MenuItem>
                     <MenuItem onClick={openPage}>Close all</MenuItem>
                 </MenuList>
             </Paper>

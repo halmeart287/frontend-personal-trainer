@@ -5,8 +5,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import TrainingList from './TrainingList';
 
+
+// NOT IN USE.
 
 // Note. This is not the same as adding a customer. Here I should attach 'Customer' to 'Training'.
 // WIP...

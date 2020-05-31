@@ -115,7 +115,7 @@ export default function CustomerList() {
     })
     .then(_ => fetchCustomers())
     .then(_ => {
-        setSnackMessage('Customer info updated.');
+        setSnackMessage('Customer info updated. ' + updatedCustomer.firstname); // How to show updated value..?
         setOpen(true)})
     .catch(err => console.error(err))
     }
@@ -144,6 +144,19 @@ export default function CustomerList() {
     // Training to Customer WIP...
         // How to POST body data that's been selected.
         // Also, how to select a Customer and present available Trainings...
+
+    /*const [trainings, setTrainings] = React.useState([])
+
+    const fetchTrainings = (trainings) => {
+        fetch('https://customerrest.herokuapp.com/api/trainings')
+        .then(response => response.json())
+        .then(data => setTrainings(data.content))
+    }
+
+    const showTrainings = () => {
+
+    }
+    */
 
     // Snackbar
     const [open, setOpen] = React.useState(false);
@@ -181,6 +194,17 @@ export default function CustomerList() {
                     backgroundColor: (selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'
                 })
             }}
+
+            detailPanel={[
+                {
+                    tooltip: 'Show trainings',
+                    render: rowData => {
+                        return(
+                            <div style={{margin: 20}}>WIP: Render all trainings linked to this customer.</div>
+                        )
+                    }
+                }
+            ]}
             />
 
             <Snackbar
